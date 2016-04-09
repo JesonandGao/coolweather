@@ -38,6 +38,7 @@ public class CoolWeatherDB {
     private CoolWeatherDB(Context context) {
         CoolWeatherOpenHelper dbHelper =
                 new CoolWeatherOpenHelper(context, DB_NAME, null, VERSION);
+        db = dbHelper.getWritableDatabase();
     }
 
     /**
