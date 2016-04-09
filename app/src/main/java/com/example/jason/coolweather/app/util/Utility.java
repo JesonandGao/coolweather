@@ -121,8 +121,8 @@ public class Utility {
      * @param context
      * @param cityName
      * @param weatherCode
-     * @param temp1 最低温度
-     * @param temp2 最高温度
+     * @param temp1
+     * @param temp2
      * @param weatherDesp
      * @param publishTime
      */
@@ -139,7 +139,7 @@ public class Utility {
         editor.putString("temp2",temp2);
         editor.putString("weather_desp", weatherDesp);
         editor.putString("publish_time", publishTime);
-        editor.putString("current_data", sdf.format(new Date()));
+        editor.putString("current_date", sdf.format(new Date()));
         editor.commit();
     }
 }
