@@ -17,7 +17,7 @@ import com.example.jason.coolweather.app.util.HttpCallbackListener;
 import com.example.jason.coolweather.app.util.HttpUtil;
 import com.example.jason.coolweather.app.util.Utility;
 
-public class WeatherActivity extends Activity implements View.OnClickListener{
+public class WeatherActivity extends Activity implements View.OnClickListener {
 
     private LinearLayout weatherInfoLayout;
 
@@ -52,7 +52,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener{
     private TextView currentDateText;
 
     /**
-     *切换城市按钮
+     * 切换城市按钮
      */
     private Button switchCity;
 
@@ -90,6 +90,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener{
         refreshWeather = (Button) findViewById(R.id.refresh_weather);
         switchCity.setOnClickListener(this);
         refreshWeather.setOnClickListener(this);
+
     }
 
     /**
@@ -122,7 +123,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener{
      * 查询县级代号所对应的天气代号
      */
     private void queryWeatherCode(String countyCode) {
-        String address = "http://www.weather.com.cn/data/list3/city"+countyCode+".xml";
+        String address = "http://www.weather.com.cn/data/list3/city" + countyCode + ".xml";
         queryFromServer(address, "countyCode");
     }
 
@@ -130,7 +131,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener{
      * 查询天气代号对应的天气
      */
     private void queryWeatherInfo(String weatherCode) {
-        String address = "http://www.weather.com.cn/data/cityinfo/"+weatherCode+".html";
+        String address = "http://www.weather.com.cn/data/cityinfo/" + weatherCode + ".html";
         queryFromServer(address, "weatherCode");
     }
 
@@ -150,7 +151,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener{
                             queryWeatherInfo(weatherCode);
                         }
                     }
-                }else if ("weatherCode".equals(type)) {
+                } else if ("weatherCode".equals(type)) {
                     //处理服务器返回的天气信息
                     Utility.handleWeatherResponse(WeatherActivity.this, response);
 
@@ -185,7 +186,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener{
         cityNameText.setText(prefs.getString("city_name", ""));
         temp1Text.setText(prefs.getString("temp1", ""));
         temp2Text.setText(prefs.getString("temp2", ""));
-        weatherDespText.setText(prefs.getString("weather_desp", ""));
+        weatherDespText.setText(prefs.getString("weather_desc", ""));
         publishText.setText("今天" + prefs.getString("publish_time", "") + "发布");
         currentDateText.setText(prefs.getString("current_date", ""));
         weatherInfoLayout.setVisibility(View.VISIBLE);

@@ -1,4 +1,4 @@
-package com.example.jason.coolweather.app.model;
+package com.example.jason.coolweather.app.entity;
 
 /**
  * Created by Jason on 4/9/2016.

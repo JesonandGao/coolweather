@@ -6,9 +6,9 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.example.jason.coolweather.app.db.CoolWeatherDB;
-import com.example.jason.coolweather.app.model.City;
-import com.example.jason.coolweather.app.model.County;
-import com.example.jason.coolweather.app.model.Province;
+import com.example.jason.coolweather.app.entity.City;
+import com.example.jason.coolweather.app.entity.County;
+import com.example.jason.coolweather.app.entity.Province;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,13 +24,13 @@ import java.util.Locale;
 public class Utility {
 
     /**
-     * 解析和处理服务器返回的省级数据
+     * 解析和处理服务器返回的 省级 数据
      */
     public synchronized static boolean handleProvinceResponse(
             CoolWeatherDB coolWeatherDB, String response) {
-        if(!TextUtils.isEmpty(response)) {
-            String[] allProvinces =response.split(",");
-            if (allProvinces != null && allProvinces.length >0) {
+        if (!TextUtils.isEmpty(response)) {
+            String[] allProvinces = response.split(",");
+            if (allProvinces != null && allProvinces.length > 0) {
                 for (String p : allProvinces) {
 
                     String[] array = p.split("\\|");
@@ -47,11 +47,11 @@ public class Utility {
     }
 
     /**
-     * 解析和处理服务器返回的市级数据
+     * 解析和处理服务器返回的 市级 数据
      */
     public static boolean handleCitiesResponse(CoolWeatherDB coolWeatherDB,
                                                String response, int ProvinceId) {
-        if(!TextUtils.isEmpty(response)) {
+        if (!TextUtils.isEmpty(response)) {
             String[] allCities = response.split(",");
             if (allCities != null && allCities.length > 0) {
                 for (String c : allCities) {
@@ -63,20 +63,20 @@ public class Utility {
                     //将解析处理的数据存储到City表
                     coolWeatherDB.saveCity(city);
                 }
-                return true ;
+                return true;
             }
         }
-        return false ;
+        return false;
     }
 
     /**
-     * 解析和处理服务器返回的县级数据
+     * 解析和处理服务器返回的 县级 数据
      */
     public static boolean handleCountiesResponse(CoolWeatherDB coolWeatherDB,
                                                  String response, int cityId) {
         if (!TextUtils.isEmpty(response)) {
             String[] allcounties = response.split(",");
-            if (allcounties  != null && allcounties.length > 0) {
+            if (allcounties != null && allcounties.length > 0) {
                 for (String c : allcounties) {
                     String[] array = c.split("\\|");
                     County county = new County();
@@ -86,10 +86,10 @@ public class Utility {
                     //将解析出来的数据存储到County表
                     coolWeatherDB.saveCounty(county);
                 }
-                return true ;
+                return true;
             }
         }
-        return false ;
+        return false;
     }
 
     /**
@@ -105,11 +105,11 @@ public class Utility {
             String weatherCode = weatherInfo.getString("cityid");
             String temp1 = weatherInfo.getString("temp1");
             String temp2 = weatherInfo.getString("temp2");
-            String weatherDesp = weatherInfo.getString("weather");
-            String publishTime = weatherInfo.getString("ptime");
+            String weatherDesc = weatherInfo.getString("weather");
+            String publishTime = weatherInfo.getString("pubtime");
 
             saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
-                    weatherDesp, publishTime);
+                    weatherDesc, publishTime);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -118,17 +118,10 @@ public class Utility {
 
     /**
      * 将服务返回的所有天气信息存储到SharedPreferences文件中
-     * @param context
-     * @param cityName
-     * @param weatherCode
-     * @param temp1
-     * @param temp2
-     * @param weatherDesp
-     * @param publishTime
      */
-    public static void saveWeatherInfo(Context context, String cityName,
-         String weatherCode, String temp1, String temp2, String weatherDesp,
-         String publishTime) {
+    private static void saveWeatherInfo(Context context, String cityName,
+                                        String weatherCode, String temp1, String temp2, String weatherDesc,
+                                        String publishTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
         SharedPreferences.Editor editor =
                 PreferenceManager.getDefaultSharedPreferences(context).edit();
@@ -136,8 +129,8 @@ public class Utility {
         editor.putString("city_name", cityName);
         editor.putString("weather_code", weatherCode);
         editor.putString("temp1", temp1);
-        editor.putString("temp2",temp2);
-        editor.putString("weather_desp", weatherDesp);
+        editor.putString("temp2", temp2);
+        editor.putString("weather_desc", weatherDesc);
         editor.putString("publish_time", publishTime);
         editor.putString("current_date", sdf.format(new Date()));
         editor.commit();

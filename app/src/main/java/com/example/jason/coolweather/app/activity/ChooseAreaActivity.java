@@ -16,9 +16,9 @@ import android.widget.Toast;
 
 import com.example.jason.coolweather.app.R;
 import com.example.jason.coolweather.app.db.CoolWeatherDB;
-import com.example.jason.coolweather.app.model.City;
-import com.example.jason.coolweather.app.model.County;
-import com.example.jason.coolweather.app.model.Province;
+import com.example.jason.coolweather.app.entity.City;
+import com.example.jason.coolweather.app.entity.County;
+import com.example.jason.coolweather.app.entity.Province;
 import com.example.jason.coolweather.app.util.HttpCallbackListener;
 import com.example.jason.coolweather.app.util.HttpUtil;
 import com.example.jason.coolweather.app.util.Utility;

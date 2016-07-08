@@ -5,9 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.jason.coolweather.app.model.City;
-import com.example.jason.coolweather.app.model.County;
-import com.example.jason.coolweather.app.model.Province;
+import com.example.jason.coolweather.app.entity.City;
+import com.example.jason.coolweather.app.entity.County;
+import com.example.jason.coolweather.app.entity.Province;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,10 @@ import java.util.List;
  */
 public class CoolWeatherDB {
 
-    /**
-     * 数据库名
-     */
+    // 数据库名
     public static final String DB_NAME = "cool_weather";
 
-    /**
-     * 数据库版本
-     */
+    // 数据库版本
     public static final int VERSION = 1;
 
     private static CoolWeatherDB coolWeatherDB;
@@ -44,7 +40,7 @@ public class CoolWeatherDB {
     /**
      * 获取CoolWeatherDB的实例
      */
-    public synchronized  static CoolWeatherDB getInstance(Context context) {
+    public synchronized static CoolWeatherDB getInstance(Context context) {
         if (coolWeatherDB == null) {
             coolWeatherDB = new CoolWeatherDB(context);
         }
@@ -67,7 +63,7 @@ public class CoolWeatherDB {
      * 从数据库读取全国所有的省份信息
      */
     public List<Province> loadProvinces() {
-        List<Province> list = new ArrayList<Province>();
+        List<Province> list = new ArrayList<>();
         Cursor cursor = db.query("Province", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
@@ -76,23 +72,21 @@ public class CoolWeatherDB {
                 province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
                 province.setProvinceCode(cursor.getString(cursor.getColumnIndex("province_code")));
                 list.add(province);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
-        if (cursor != null) {
-            cursor.close();
-        }
+        cursor.close();
         return list;
     }
 
     /**
      * 将city实例存储到数据库
      */
-    public void saveCity (City city) {
+    public void saveCity(City city) {
         if (city != null) {
             ContentValues values = new ContentValues();
             values.put("city_name", city.getCityName());
             values.put("city_code", city.getCityCode());
-            values.put("province_id",city.getProvinceId());
+            values.put("province_id", city.getProvinceId());
             db.insert("City", null, values);
         }
     }
@@ -112,11 +106,9 @@ public class CoolWeatherDB {
                 city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
                 city.setProvinceId(provinceId);
                 list.add(city);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
-        if (cursor != null) {
-            cursor.close();
-        }
+        cursor.close();
         return list;
     }
 
@@ -126,9 +118,9 @@ public class CoolWeatherDB {
     public void saveCounty(County county) {
         if (county != null) {
             ContentValues values = new ContentValues();
-            values.put("county_name",county.getCountyName());
-            values.put("county_code",county.getCountyCode());
-            values.put("city_id",county.getCityId());
+            values.put("county_name", county.getCountyName());
+            values.put("county_code", county.getCountyCode());
+            values.put("city_id", county.getCityId());
             db.insert("County", null, values);
         }
     }
@@ -148,11 +140,9 @@ public class CoolWeatherDB {
                 county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
                 county.setCityId(cityId);
                 list.add(county);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
-        if (cursor != null) {
-            cursor.close();
-        }
+        cursor.close();
         return list;
     }
 }
