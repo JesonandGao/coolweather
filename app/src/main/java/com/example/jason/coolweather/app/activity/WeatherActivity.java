@@ -124,44 +124,59 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
      */
     private void queryWeatherCode(String countyCode) {
         String address = "http://www.weather.com.cn/data/list3/city" + countyCode + ".xml";
-        queryFromServer(address, "countyCode");
+        queryFromServer(address);
     }
 
     /**
      * 查询天气代号对应的天气
      */
     private void queryWeatherInfo(String weatherCode) {
-        String address = "http://www.weather.com.cn/data/cityinfo/" + weatherCode + ".html";
-        queryFromServer(address, "weatherCode");
+        String httpUrl = "http://apis.baidu.com/apistore/weatherservice/cityid";
+        String httpArg = "cityid=" + weatherCode;
+        queryByWeatherCode(httpUrl, httpArg);
     }
 
     /**
-     * 根据传入的地址和类型去向服务器查询天气代号或者天气信息
+     * 根据城市代号，去向服务器查询天气代号
      */
-    private void queryFromServer(final String address, final String type) {
+    private void queryFromServer(String address) {
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
-                if ("countyCode".equals(type)) {
-                    if (!TextUtils.isEmpty(response)) {
-                        //从服务器返回的数据中解析出天气代号
-                        String[] array = response.split("\\|");
-                        if (array != null && array.length == 2) {
-                            String weatherCode = array[1];
-                            queryWeatherInfo(weatherCode);
-                        }
+                if (!TextUtils.isEmpty(response)) {
+                    //从服务器返回的数据中解析出天气代号
+                    String[] array = response.split("\\|");
+                    if (array != null && array.length == 2) {
+                        String weatherCode = array[1];
+                        queryWeatherInfo(weatherCode);
                     }
-                } else if ("weatherCode".equals(type)) {
-                    //处理服务器返回的天气信息
-                    Utility.handleWeatherResponse(WeatherActivity.this, response);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showWeather();
-                        }
-                    });
                 }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
+
+    /**
+     * 根据城市代码id，向服务器获取天气信息
+     */
+    private void queryByWeatherCode(String httpUrl, String httpArg) {
+        HttpUtil.request(httpUrl, httpArg, new HttpCallbackListener() {
+            @Override
+            public void onFinish(String response) {
+
+                //处理服务器返回的天气信息
+                Utility.handleWeatherResponse(WeatherActivity.this, response);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showWeather();
+                    }
+                });
             }
 
             @Override

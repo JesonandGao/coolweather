@@ -9,9 +9,8 @@ import com.example.jason.coolweather.app.db.CoolWeatherDB;
 import com.example.jason.coolweather.app.entity.City;
 import com.example.jason.coolweather.app.entity.County;
 import com.example.jason.coolweather.app.entity.Province;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.jason.coolweather.app.entity.WeatherInfo;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -97,22 +96,35 @@ public class Utility {
      */
     public static void handleWeatherResponse(Context context, String response) {
 
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
+        Gson gson = new Gson();
+        WeatherInfo info = gson.fromJson(response, WeatherInfo.class);
 
-            String cityName = weatherInfo.getString("city");
-            String weatherCode = weatherInfo.getString("cityid");
-            String temp1 = weatherInfo.getString("temp1");
-            String temp2 = weatherInfo.getString("temp2");
-            String weatherDesc = weatherInfo.getString("weather");
-            String publishTime = weatherInfo.getString("pubtime");
+        String cityName = info.getRetData().getCity();
+        String weatherCode = info.getRetData().getCitycode();
+        String temp1 = info.getRetData().getL_tmp();
+        String temp2 = info.getRetData().getH_tmp();
+        String weatherDesc = info.getRetData().getWeather();
+        String publishTime = info.getRetData().getTime();
 
-            saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
-                    weatherDesc, publishTime);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
+                weatherDesc, publishTime);
+
+//        try {
+//            JSONObject jsonObject = new JSONObject(response);
+//            JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
+//
+//            String cityName = weatherInfo.getString("city");
+//            String weatherCode = weatherInfo.getString("cityid");
+//            String temp1 = weatherInfo.getString("temp1");
+//            String temp2 = weatherInfo.getString("temp2");
+//            String weatherDesc = weatherInfo.getString("weather");
+//            String publishTime = weatherInfo.getString("pubtime");
+//
+//            saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
+//                    weatherDesc, publishTime);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

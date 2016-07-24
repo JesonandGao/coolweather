@@ -50,16 +50,12 @@ public class HttpUtil {
     }
 
     /**
-     * 更换接口了
-     */
-    /**
-     * @param httpUrl
-     *            :请求接口
-     * @param httpArg
-     *            :参数
+     * @param httpUrl :请求接口
+     * @param httpArg :参数
      * @return 返回结果
      */
-    public static String request(String httpUrl, String httpArg) {
+    public static void request(String httpUrl, String httpArg,
+                                 final HttpCallbackListener listener) {
         BufferedReader reader = null;
         String result = null;
         StringBuffer sbf = new StringBuffer();
@@ -71,7 +67,7 @@ public class HttpUtil {
                     .openConnection();
             connection.setRequestMethod("GET");
             // 填入apikey到HTTP header
-            connection.setRequestProperty("apikey",  "106d9a55156aabe582bef703a3ef39f3");
+            connection.setRequestProperty("apikey", "106d9a55156aabe582bef703a3ef39f3");
             connection.connect();
             InputStream is = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -82,9 +78,16 @@ public class HttpUtil {
             }
             reader.close();
             result = sbf.toString();
+            if (listener != null) {
+                //回调onFinish()方法
+                listener.onFinish(result);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            if (listener != null) {
+                //回调onError方法
+                listener.onError(e);
+            }
         }
-        return result;
     }
 }
